@@ -397,6 +397,8 @@ class particle_tracking(object):
                    if the metric input is not valid (for the estimation of the particle fluorescence)
                    if the operation input is not valid (for the estimation of the particle fluorescence)
         """
+        particle_data = []
+        
         if box_size%2 == 0:
             raise ValueError('The box_size parameter is even. Choose an odd integer.')
         if metric not in ['gaussian volume', 'raw pixels', 'smoothed pixels']:
@@ -406,7 +408,8 @@ class particle_tracking(object):
         
         if analysis_range[0] == 0:
             # Initiate a pandas dataframe were all the results will stored
-            particle_df = pd.DataFrame(columns=['experiment', 'xy_position','cell', 'frame', 'particle_center', 'max_fluorescence', 'particle_brightest_pixels', 'smoothed_brightest_pixels', 'gaussian_center', 'gaussian_amplitude', 'gaussian_std', 'gaussian_volume', 'gaussian_rotation', 'particle_fluorescence', 'average_background_fluorescence'])
+            pandas_columns = ['experiment', 'xy_position','cell', 'frame', 'particle_center', 'max_fluorescence', 'particle_brightest_pixels', 'smoothed_brightest_pixels', 'gaussian_center', 'gaussian_amplitude', 'gaussian_std', 'gaussian_volume', 'gaussian_rotation', 'particle_fluorescence', 'average_background_fluorescence']
+            # particle_df = pd.DataFrame()
             # resume the analysis from a previous frame if it exists, otherwise start a new analysis from a non-zero frame
         elif analysis_range[0] > 0:
             if os.path.exists(self.save_path+'/'+self.experiment+'_'+self.position_string+'_particles_df') == True:
@@ -440,10 +443,14 @@ class particle_tracking(object):
                     # get the cell ID of the associated particle
                     cell_input = self.cell_contains_particle(gaussian_particle_center, bkg_cor_image, channel_offset, cell_show)
                     # organize the data into a new pandas row
-                    pre_df = [self.experiment, self.position, cell_input, fr, particle_center, brightest_raw_pixels.max(), brightest_raw_pixels, brightest_fitted_pixels, gaussian_particle_center, height, (width_x, width_y), gaussian_vol, rotation, particle_vol, mean_bkg]
+                    pre_data = [self.experiment, self.position, cell_input, fr, particle_center, brightest_raw_pixels.max(), brightest_raw_pixels, brightest_fitted_pixels, gaussian_particle_center, height, (width_x, width_y), gaussian_vol, rotation, particle_vol, mean_bkg]
                     # append the row to the pandas dataframe
-                    particle_df = particle_df.append(pd.DataFrame([pre_df], columns=list(particle_df.columns)),ignore_index=True)
+                    # pre_df = pd.DataFrame([pre_data], columns=particle_df.columns.tolist())
+                    # particle_df = pd.concat([particle_df, pre_df], ignore_index=True)
+                    particle_data.append(pre_data)
 
+        particle_df = pd.DataFrame(np.array(particle_data).transpose(), columns=pandas_columns)
+        
         with open(self.save_path+'/'+self.experiment+'_'+self.position_string+'_particles_df', 'wb') as handle:
             particle_df.to_pickle(path = handle, compression='zip', protocol = pickle.HIGHEST_PROTOCOL)
         
