@@ -105,7 +105,7 @@ def connecting_trajectories(curated_df, max_radius, cell, fluorescence_bandpass,
             elif len(particle_merging_dictionary.keys()) > 0: # if there are particle trajectories to be merged, first merge the two trajectories that give the longest trajectory combined
                 max_key = max(particle_merging_dictionary, key=particle_merging_dictionary.get) 
                 print(max_key, 'particles are merged...')
-                print(curated_df)
+                # print(curated_df)
                 curated_df.particle_trajectory_id.replace(max_key[1], max_key[0], inplace=True)
                 # repeat the loop to look to other pairs after merging of the first pair.
     return curated_df
