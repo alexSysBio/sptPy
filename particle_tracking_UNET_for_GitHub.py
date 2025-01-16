@@ -397,7 +397,6 @@ class particle_tracking(object):
                    if the metric input is not valid (for the estimation of the particle fluorescence)
                    if the operation input is not valid (for the estimation of the particle fluorescence)
         """
-        particle_data = []
         
         if box_size%2 == 0:
             raise ValueError('The box_size parameter is even. Choose an odd integer.')
@@ -406,16 +405,20 @@ class particle_tracking(object):
         if operation not in ['mean', 'median', 'sum', 'max']:
              raise ValueError("Choose 'mean', 'median', 'sum' or 'max' as the operation.")
         
+        particle_data = []
+        pandas_columns = ['experiment', 'xy_position','cell', 'frame', 'particle_center', 
+                          'max_fluorescence', 'particle_brightest_pixels', 'smoothed_brightest_pixels', 
+                          'gaussian_center', 'gaussian_amplitude', 'gaussian_std', 'gaussian_volume', 
+                          'gaussian_rotation', 'particle_fluorescence', 'average_background_fluorescence']
         if analysis_range[0] == 0:
             # Initiate a pandas dataframe were all the results will stored
-            pandas_columns = ['experiment', 'xy_position','cell', 'frame', 'particle_center', 'max_fluorescence', 'particle_brightest_pixels', 'smoothed_brightest_pixels', 'gaussian_center', 'gaussian_amplitude', 'gaussian_std', 'gaussian_volume', 'gaussian_rotation', 'particle_fluorescence', 'average_background_fluorescence']
-            # particle_df = pd.DataFrame()
+            particle_df = pd.DataFrame(columns=pandas_columns)
             # resume the analysis from a previous frame if it exists, otherwise start a new analysis from a non-zero frame
         elif analysis_range[0] > 0:
             if os.path.exists(self.save_path+'/'+self.experiment+'_'+self.position_string+'_particles_df') == True:
                 particle_df = pd.read_pickle(self.save_path+'/'+self.experiment+'_'+self.position_string+'_particles_df', compression='zip')
             else:
-                particle_df = pd.DataFrame(columns=['experiment', 'xy_position','cell', 'frame', 'particle_center', 'max_fluorescence', 'particle_brightest_pixels', 'smoothed_brightest_pixels', 'gaussian_center', 'gaussian_amplitude', 'gaussian_std', 'gaussian_volume', 'gaussian_rotation', 'particle_fluorescence','average_background_fluorescence'])
+                particle_df = pd.DataFrame(columns=pandas_columns)
         # Iterate through the specified frames in the stream acquisition
         for fr in range(analysis_range[0], analysis_range[1]):
             print('frame '+str(fr+1)+' out of '+str(len(self.particle_images))+', position: '+self.position_string)
@@ -444,7 +447,6 @@ class particle_tracking(object):
                     cell_input = self.cell_contains_particle(gaussian_particle_center, bkg_cor_image, channel_offset, cell_show)
                     # organize the data into a new pandas row
                     pre_data = [self.experiment, self.position, cell_input, fr, particle_center, brightest_raw_pixels.max(), brightest_raw_pixels, brightest_fitted_pixels, gaussian_particle_center, height, (width_x, width_y), gaussian_vol, rotation, particle_vol, mean_bkg]
-                    # append the row to the pandas dataframe
                     # pre_df = pd.DataFrame([pre_data], columns=particle_df.columns.tolist())
                     # particle_df = pd.concat([particle_df, pre_df], ignore_index=True)
                     particle_data.append(pre_data)
