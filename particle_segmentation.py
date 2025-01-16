@@ -76,7 +76,7 @@ def particle_segmentation(back_sub_image, log_adaptive_parameters, min_spot_size
         
         if type(post_processing_threshold) == int or type(post_processing_threshold) == float:
             if int(particle_centroid_yx[0]-particle_major_axis/2) >= 0 and int(particle_centroid_yx[0]+particle_major_axis/2) < sensor[1] and int(particle_centroid_yx[1]-particle_major_axis/2) >= 0 and int(particle_centroid_yx[1]+particle_major_axis/2) < sensor[0]:
-                print(particle_centroid_yx[::-1], particle_area, particle_major_axis, particle_minor_axis,'post processing...')
+                # print(particle_centroid_yx[::-1], particle_area, particle_major_axis, particle_minor_axis,'post processing...')
                 # crop the image around the spot position - zooming into the spot of interest and apply a stricter log filter
                 cropped_image = back_sub_image[int(particle_centroid_yx[0]-particle_major_axis/2):int(particle_centroid_yx[0]+particle_major_axis/2), int(particle_centroid_yx[1]-particle_major_axis/2):int(particle_centroid_yx[1]+particle_major_axis/2)]
                 fluorescence_threshold = np.sort(cropped_image.ravel())[-int(len(cropped_image.ravel())*((100-post_processing_threshold)/100))]
@@ -133,11 +133,11 @@ def particle_segmentation(back_sub_image, log_adaptive_parameters, min_spot_size
                 particle_aspect_ratio_list.append(particle_aspect_ratio)
                 particle_area_list.append(particle_area)
             elif particle_area >= min_spot_size and particle_area <= max_spot_size and particle_aspect_ratio < min_spot_aspect_ratio:
-                print(particle_area, particle_minor_axis, particle_major_axis)
+                # print(particle_area, particle_minor_axis, particle_major_axis)
                 particle_lists = [particle_centroid_list, particle_minor_axis_list, particle_major_axis_list, particle_aspect_ratio_list, particle_area_list]
                 particle_centroid_list, particle_minor_axis_list, particle_major_axis_list, particle_aspect_ratio_list, particle_area_list = post_processing(back_sub_image, particle_centroid_yx, particle_major_axis, particle_minor_axis, post_processing_threshold, particle_lists)
             elif (particle_area > max_spot_size):
-                print(particle_area, particle_minor_axis, particle_major_axis)
+                # print(particle_area, particle_minor_axis, particle_major_axis)
                 particle_lists = [particle_centroid_list, particle_minor_axis_list, particle_major_axis_list, particle_aspect_ratio_list, particle_area_list]
                 particle_centroid_list, particle_minor_axis_list, particle_major_axis_list, particle_aspect_ratio_list, particle_area_list = post_processing(back_sub_image, particle_centroid_yx, particle_major_axis, particle_minor_axis, post_processing_threshold, particle_lists)
         elif (particle_area <= 0 or particle_minor_axis <= 0 or particle_major_axis <= 0):
@@ -176,7 +176,7 @@ def check_particle_segmentation_parameters(particle_image, phase_image, post_pro
     Providing an empty list in the self.particle_segmentation function will abort post-processing)
     """
     # good default parameters
-#        ([4.0, 1000, 98.5, 2.0, 7, -2.0, 0], 3, 150, 0.3, [])
+#        ([4.0, 1000, 90, 2.0, 9, -7.0, 0], 2, 100, 0.3, [])
     
 #        particle_image = particle.particle_images[0]
 #        print('Subtracting background...')
