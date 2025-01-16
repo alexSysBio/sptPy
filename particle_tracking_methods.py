@@ -23,7 +23,6 @@ def removing_merging_trajectories(curated_df):
     
     return curated_df
 
-
 def connecting_trajectories(curated_df, max_radius, cell, fluorescence_bandpass, n_frames):
     """
     This function can be used to merge trajectories that belong to the same cell and do not overlap.
@@ -106,8 +105,9 @@ def connecting_trajectories(curated_df, max_radius, cell, fluorescence_bandpass,
             elif len(particle_merging_dictionary.keys()) > 0: # if there are particle trajectories to be merged, first merge the two trajectories that give the longest trajectory combined
                 max_key = max(particle_merging_dictionary, key=particle_merging_dictionary.get) 
                 print(max_key, 'particles are merged...')
-                curated_df = curated_df.replace(max_key[1], max_key[0])
-                # repeat the loop to look to other pairs after merhing of the first pair.
+                print(curated_df)
+                curated_df.particle_trajectory_id.replace(max_key[1], max_key[0], inplace=True)
+                # repeat the loop to look to other pairs after merging of the first pair.
     return curated_df
 
 
@@ -237,7 +237,7 @@ def tracking_the_particles(particle_df, max_radius, memory, fluorescence_bandpas
             next_frame = particle_frame + 1 # look in the next frames for the linked particle
             while (next_frame <= particle_frame + memory and next_frame < n_frames):    # the range of frames to look into is defined by the memory parameter
                 minimum_distance_frame_df = minimum_distance_df[minimum_distance_df['frame']==next_frame]
-                minimum_distance_frame_df = minimum_distance_frame_df[minimum_distance_frame_df['fluorescence_ratio'].between(fluorescence_bandpass[0], fluorescence_bandpass[1], inclusive=False)] # select those particles that have similar fluorescence
+                minimum_distance_frame_df = minimum_distance_frame_df[minimum_distance_frame_df['fluorescence_ratio'].between(*fluorescence_bandpass, inclusive='neither')] # select those particles that have similar fluorescence
                 if  minimum_distance_frame_df.shape[0] == 1: # if there is only one particle with similar fluorescence
                     particle_linkage_dictionary[particle_index] = minimum_distance_frame_df.index.values[0]
                     linked_frame = next_frame
