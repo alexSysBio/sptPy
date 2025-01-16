@@ -469,7 +469,7 @@ class particle_tracking(object):
         # print(particle_df.describe)
         curated_df = ptm.tracking_the_particles(particle_df, max_radius, memory, fluorescence_bandpass, self.interval, fraction_length, merged, cell_connect)
        
-        white = np.ones((self.sensor[1], self.sensor[0]), dtype=np.float)
+        white = np.ones((self.sensor[1], self.sensor[0]), dtype=float)
 
         plt.figure(figsize=(40,40))
         plt.imshow(white, cmap='gray', vmin=0, vmax=1)
@@ -494,7 +494,7 @@ class particle_tracking(object):
         print('removing trajectories with duplicated frames...')
         
         # plot the trajectories
-        white = np.ones((self.sensor[1], self.sensor[0]), dtype=np.float)
+        white = np.ones((self.sensor[1], self.sensor[0]), dtype=float)
         plt.figure(figsize=(40,40))
         plt.imshow(white, cmap='gray', vmin=0, vmax=1)
         for trajectory in curated_df['particle_trajectory_id'].unique():
