@@ -405,7 +405,7 @@ class particle_tracking(object):
         if operation not in ['mean', 'median', 'sum', 'max']:
              raise ValueError("Choose 'mean', 'median', 'sum' or 'max' as the operation.")
         
-        particle_data = []
+        # particle_data = []
         pandas_columns = ['experiment', 'xy_position','cell', 'frame', 'particle_center', 
                           'max_fluorescence', 'particle_brightest_pixels', 'smoothed_brightest_pixels', 
                           'gaussian_center', 'gaussian_amplitude', 'gaussian_std', 'gaussian_volume', 
@@ -446,12 +446,16 @@ class particle_tracking(object):
                     # get the cell ID of the associated particle
                     cell_input = self.cell_contains_particle(gaussian_particle_center, bkg_cor_image, channel_offset, cell_show)
                     # organize the data into a new pandas row
-                    pre_data = [self.experiment, self.position, cell_input, fr, particle_center, brightest_raw_pixels.max(), brightest_raw_pixels, brightest_fitted_pixels, gaussian_particle_center, height, (width_x, width_y), gaussian_vol, rotation, particle_vol, mean_bkg]
-                    # pre_df = pd.DataFrame([pre_data], columns=particle_df.columns.tolist())
-                    # particle_df = pd.concat([particle_df, pre_df], ignore_index=True)
-                    particle_data.append(pre_data)
+                    pre_data = [self.experiment, self.position, cell_input, fr, particle_center, 
+                                brightest_raw_pixels.max(), brightest_raw_pixels, brightest_fitted_pixels, 
+                                gaussian_particle_center, height, (width_x, width_y), gaussian_vol, rotation, particle_vol, mean_bkg]
+                    pre_df = pd.DataFrame([pre_data], columns=particle_df.columns.tolist())
+                    particle_df = pd.concat([particle_df, pre_df], ignore_index=True)
+                    # particle_data.append(pre_data)
 
-        particle_df = pd.DataFrame(np.array(particle_data).transpose(), columns=pandas_columns)
+        # par_df = pd.DataFrame(np.array(particle_data).transpose(), columns=pandas_columns)
+        # particle_df = pd.concat([particle_df, par_df])
+        # particle_df = particle_df.reindex(np.arange(particle_df.shape[0]))
         
         with open(self.save_path+'/'+self.experiment+'_'+self.position_string+'_particles_df', 'wb') as handle:
             particle_df.to_pickle(path = handle, compression='zip', protocol = pickle.HIGHEST_PROTOCOL)
@@ -462,7 +466,7 @@ class particle_tracking(object):
     def run_particle_tracking(self, max_radius, memory, fluorescence_bandpass, fraction_length=0.1, merged=True, cell_connect=True):
         
         particle_df = pd.read_pickle(self.save_path+'/'+self.experiment+'_'+self.position_string+'_particles_df', compression='zip')
-        
+        # print(particle_df.describe)
         curated_df = ptm.tracking_the_particles(particle_df, max_radius, memory, fluorescence_bandpass, self.interval, fraction_length, merged, cell_connect)
        
         white = np.ones((self.sensor[1], self.sensor[0]), dtype=np.float)
