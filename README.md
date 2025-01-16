@@ -6,10 +6,8 @@ Author: Alexandros Papagianakis, HHMI at Stanford University, 2025
 
 <br> comming soon... a second class, which inherits from the particle_tracking class, will be used to project the segmented particle trajectories on relative cell coordinates.
 
-<br> This particle segmentation method has been used in the following paper:
+<br> The LoG/adaptive filter and the associated object segmentation method been used in the following paper:
 <br> https://www.biorxiv.org/content/10.1101/2024.10.08.617237v2.full
 <br> DNA/polysome phase separation and cell width confinement couple nucleoid segregation to cell growth in Escherichia coli
 <br> Alexandros Papagiannakis, Qiwei Yu, Sander K. Govers, Wei-Hsiang Lin, Ned S. Wingreen, Christine Jacobs-Wagner
 <br> doi: https://doi.org/10.1101/2024.10.08.617237
-
-<br> Please cite
