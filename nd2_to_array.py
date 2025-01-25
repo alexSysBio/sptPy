@@ -362,7 +362,7 @@ def nd2_to_array(images_path):
     elif iteration_axis == 'c':
         image_arrays = run_c_iteration(images, iteration_axis, channels)
     elif iteration_axis == 'm':
-        image_array = run_m_iteration(images, iteration_axis)
+        image_arrays = run_m_iteration(images, iteration_axis)
     elif iteration_axis == 'mc':
         image_arrays = run_mc_iteration(images, iteration_axis, number_of_channels, number_of_positions, channels)
     elif iteration_axis == 'mt':
