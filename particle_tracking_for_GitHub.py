@@ -127,8 +127,8 @@ class particle_tracking(object):
                 if cell_id not in bad_cells:
                     cell_mask = np.zeros((mask_array.shape[0], mask_array.shape[1]))
                     cell_mask[mask_array==cell]=1
-                    cell_mask = ndimage.morphology.binary_fill_holes(cell_mask).astype(int)
-                    dilated_cell_mask = scipy.ndimage.morphology.binary_dilation(cell_mask, iterations=1)
+                    cell_mask = ndimage.binary_fill_holes(cell_mask).astype(int)
+                    dilated_cell_mask = scipy.ndimage.binary_dilation(cell_mask, iterations=1)
                     y_mask_coords, x_mask_coords = np.where(cell_mask==1)
                     minx,miny,maxx,maxy = x_mask_coords.min(), y_mask_coords.min(), x_mask_coords.max(), y_mask_coords.max()
                     # remove the masks at the edge of the sensor
@@ -139,8 +139,8 @@ class particle_tracking(object):
     #                    plt.show()
                         pads[cell_id] = (minx-pad, miny-pad, maxx+pad, maxy+pad)
                         cell_area_px[cell_id] = np.nonzero(cropped_cell_masks[cell_id])[0].shape[0]
-                        center_of_mass[cell_id] = ndimage.measurements.center_of_mass(cell_masks[cell_id])
-                        cropped_center_of_mass[cell_id] = ndimage.measurements.center_of_mass(cropped_cell_masks[cell_id])
+                        center_of_mass[cell_id] = ndimage.center_of_mass(cell_masks[cell_id])
+                        cropped_center_of_mass[cell_id] = ndimage.center_of_mass(cropped_cell_masks[cell_id])
                         cell_mesh_y, cell_mesh_x = zip(*skimage.measure.find_contours(dilated_cell_mask, level=0.5)[0])
                         cell_polygons[cell_id] = Polygon(tuple(zip(cell_mesh_x,cell_mesh_y)))
                         cell_meshes[cell_id] = [cell_mesh_x, cell_mesh_y]
@@ -543,7 +543,7 @@ class particle_tracking(object):
         x_use = 'x'
         y_use = 'y'
             
-        white = np.ones((self.sensor[1], self.sensor[0]), dtype=np.float)
+        white = np.ones((self.sensor[1], self.sensor[0]), dtype=float)
         plt.figure(figsize=(40,40))
         plt.imshow(white, cmap='gray', vmin=0, vmax=1)
         for trajectory in curated_df['particle_trajectory_id'].unique():

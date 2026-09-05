@@ -62,7 +62,7 @@ def log_adaptive_filter(image, parameters):
     masked_image = adaptively_masked_image * log_image
         # erode the image if the erosion iterations are higher than 1
     if parameters[6] > 0:
-        adaptively_masked_image = ndimage.morphology.binary_erosion(masked_image, iterations = parameters[6])
+        adaptively_masked_image = ndimage.binary_erosion(masked_image, iterations = parameters[6])
         final_image = adaptively_masked_image
     elif parameters[6] == 0:
         final_image = masked_image
