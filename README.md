@@ -33,7 +33,7 @@ flowchart LR
 6. **Cell assignment** — each localized particle is assigned to the cell whose (dilated) polygon contains it; particles matching zero or multiple cells are left unassigned (`NaN`).
 7. **Tracking and curation** ([particle_tracking_methods.py](particle_tracking_methods.py)) — links particles between frames by nearest-neighbor search within a maximum radius, gated by a fluorescence-ratio bandpass, with a memory parameter for transiently disappearing particles. Curation steps: removal of trajectories that merge to a common position, removal of spurious short trajectories, and connection of non-overlapping trajectory fragments that belong to the same cell.
 8. **Drift estimation** ([image_drift.py](image_drift.py)) — estimates subpixel image drift between the phase-contrast snapshots taken before and after the stream acquisition by phase cross-correlation ([Guizar-Sicairos et al., 2008](https://doi.org/10.1364/OL.33.000156)).
-9. **Cell coordinates** ([Biviriate_medial_axis_estimation.py](Biviriate_medial_axis_estimation.py)) — constructs the medial axis of single cells from the distance transform of the (10× upsampled) cell mask and projects cell pixels onto it, yielding relative 1D coordinates from pole to pole. *A second class that inherits from `particle_tracking` and projects trajectories onto these relative cell coordinates is coming soon.*
+9. **Cell coordinates** ([Bivariate_medial_axis_estimation.py](Bivariate_medial_axis_estimation.py)) — constructs the medial axis of single cells from the distance transform of the (10× upsampled) cell mask and projects cell pixels onto it, yielding relative 1D coordinates from pole to pole. *A second class that inherits from `particle_tracking` and projects trajectories onto these relative cell coordinates is coming soon.*
 
 ## Repository contents
 
@@ -47,7 +47,7 @@ flowchart LR
 | [custom_image_filters.py](custom_image_filters.py) | Combined LoG / adaptive threshold filter |
 | [image_drift.py](image_drift.py) | Subpixel drift estimation by phase cross-correlation |
 | [nd2_to_array.py](nd2_to_array.py) | Nikon `.nd2` → numpy conversion and metadata extraction |
-| [Biviriate_medial_axis_estimation.py](Biviriate_medial_axis_estimation.py) | Cell medial axis estimation and 1D (pole-to-pole) coordinate projection |
+| [Bivariate_medial_axis_estimation.py](Bivariate_medial_axis_estimation.py) | Cell medial axis estimation and 1D (pole-to-pole) coordinate projection |
 | [particle_tracking_example.ipynb](particle_tracking_example.ipynb) | Worked example of the full workflow |
 
 ## Installation
@@ -62,12 +62,11 @@ cd sptPy
 Dependencies:
 
 ```bash
-pip install numpy pandas scipy scikit-image matplotlib shapely pillow pims pims_nd2
+pip install -r requirements.txt
 ```
 
 - `pims_nd2` provides the `ND2_Reader` used to load Nikon `.nd2` files.
 - `pandas >= 1.3` is required (`Series.between(..., inclusive='neither')`).
-- The code uses some legacy NumPy/SciPy namespaces (`np.float`, `scipy.ndimage.morphology`, `scipy.ndimage.measurements`). If you encounter `AttributeError` with recent releases, pin `numpy < 1.24` and `scipy < 1.15`.
 
 ## Input data
 
@@ -77,7 +76,7 @@ pip install numpy pandas scipy scikit-image matplotlib shapely pillow pims pims_
 
 ## Quick start
 
-See [particle_tracking_example.ipynb](particle_tracking_example.ipynb) for the complete worked example. (Note: the notebook imports the main module under its former name `particle_tracking_UNET_for_GitHub`; the file is now called `particle_tracking_for_GitHub.py`.)
+See [particle_tracking_example.ipynb](particle_tracking_example.ipynb) for the complete worked example.
 
 ```python
 import particle_tracking_for_GitHub as spt
