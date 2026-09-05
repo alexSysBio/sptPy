@@ -3,11 +3,11 @@
 Created on Wed Jan 15 13:52:29 2025
 
 @author: Alexandros Papagiannakis, HHMI at Stanford University
-The LoG/adaptive filter and the associated object segmentation method been used in the following paper:
-https://www.biorxiv.org/content/10.1101/2024.10.08.617237v2.full
-DNA/polysome phase separation and cell width confinement couple nucleoid segregation to cell growth in Escherichia coli
+The LoG/adaptive filter and the associated object segmentation method have been used in the following paper:
+Nonequilibrium polysome dynamics promote chromosome segregation and its coupling to cell growth in Escherichia coli
 Alexandros Papagiannakis, Qiwei Yu, Sander K. Govers, Wei-Hsiang Lin, Ned S. Wingreen, Christine Jacobs-Wagner
-doi: https://doi.org/10.1101/2024.10.08.617237
+eLife 14:RP104276 (2025), https://doi.org/10.7554/eLife.104276
+(preprint: https://doi.org/10.1101/2024.10.08.617237)
 
 MIT license
 """
