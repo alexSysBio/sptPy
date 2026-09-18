@@ -12,6 +12,7 @@ eLife 14:RP104276 (2025), https://doi.org/10.7554/eLife.104276
 MIT license
 """
 
+
 import numpy as np
 import custom_image_filters as cimf
 from skimage.measure import label, regionprops
